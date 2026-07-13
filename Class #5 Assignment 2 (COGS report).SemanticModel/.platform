@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Class #5 Assignment 2 (COGS report)"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "14baf8f7-8e46-49b1-8cf7-e2dc839d5bb0"
+  }
+}

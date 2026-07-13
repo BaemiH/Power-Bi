@@ -1,0 +1,5 @@
+relationship 39a8a7ff-85e2-4849-b35d-50b0b01a6d5c
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'EXERCISE 5 2'.Date
+	toColumn: LocalDateTable_67d6f0d6-dc40-47f7-aa16-6dd6a28a2b28.Date
+

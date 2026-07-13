@@ -1,0 +1,85 @@
+table OrderBreakdown
+	lineageTag: 0c5099bf-ae94-41dc-9f98-0dc2a4aeecc3
+
+	column 'Order ID'
+		dataType: string
+		lineageTag: d9f53efb-d6cc-4a2f-ac56-a33c5b1973e5
+		summarizeBy: none
+		sourceColumn: Order ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product Name'
+		dataType: string
+		lineageTag: aee8082d-6f35-4ba7-a360-80f570dc51e0
+		summarizeBy: none
+		sourceColumn: Product Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Discount
+		dataType: double
+		lineageTag: 8e2f1c6e-0a15-4057-ae7a-0e6fb4a45e37
+		summarizeBy: sum
+		sourceColumn: Discount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Sales
+		dataType: int64
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 1bd27bcd-fdb5-40cf-99fb-163265a1ec3f
+		summarizeBy: sum
+		sourceColumn: Sales
+
+		annotation SummarizationSetBy = Automatic
+
+	column Profit
+		dataType: int64
+		formatString: 0
+		lineageTag: f7f33c6d-6a84-4bc8-92c0-5b0266a53cd5
+		summarizeBy: sum
+		sourceColumn: Profit
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 0a7dfb3a-0a46-4fed-a2f6-f6c8ef42b0e5
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 517b9f65-f6d0-49e2-b2c0-c2ef36e43650
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sub-Category
+		dataType: string
+		lineageTag: 725f8066-38db-42b2-989e-498647359ea3
+		summarizeBy: none
+		sourceColumn: Sub-Category
+
+		annotation SummarizationSetBy = Automatic
+
+	partition OrderBreakdown = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\Tommy Naughton\Downloads\AmazingMartEU2Geo.xlsx"), null, true),
+				    OrderBreakdown_Sheet = Source{[Item="OrderBreakdown",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(OrderBreakdown_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Order ID", type text}, {"Product Name", type text}, {"Discount", type number}, {"Sales", Int64.Type}, {"Profit", Int64.Type}, {"Quantity", Int64.Type}, {"Category", type text}, {"Sub-Category", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

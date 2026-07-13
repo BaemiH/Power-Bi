@@ -1,0 +1,33 @@
+table 'Material Type'
+	lineageTag: ada4fabe-a6e0-4da9-be74-261ef64e567d
+
+	column 'Material Type ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 5f38645c-1843-463d-ae3c-0a0d98b22460
+		summarizeBy: none
+		sourceColumn: Material Type ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Material Type'
+		dataType: string
+		lineageTag: fa712c81-c965-433c-ad45-b2ceb6c53129
+		summarizeBy: none
+		sourceColumn: Material Type
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Material Type' = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("T:\Users\tnaughton\Downloads\Data File J35 v2-1.xlsx"), null, true),
+				    #"Material Type_Sheet" = Source{[Item="Material Type",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Material Type_Sheet", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Material Type ID", Int64.Type}, {"Material Type", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

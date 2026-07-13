@@ -1,0 +1,132 @@
+table ListOfOrders
+	lineageTag: 3505b266-bf69-499b-a577-3cc5247c7827
+
+	column 'Order ID'
+		dataType: string
+		lineageTag: db11f990-9347-4c14-b05a-a3453beafd09
+		summarizeBy: none
+		sourceColumn: Order ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 523813b8-395c-41ba-8246-58c206d1eddc
+		summarizeBy: none
+		sourceColumn: Order Date
+
+		variation Variation
+			isDefault
+			relationship: 358709bd-14d9-43c4-8a6f-86eb00175bd3
+			defaultHierarchy: LocalDateTable_13e11ebe-853a-4a84-ab44-aab5537bd3e0.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Customer Name'
+		dataType: string
+		lineageTag: 6dc211db-8e17-4a53-b6f2-527a247b6947
+		summarizeBy: none
+		sourceColumn: Customer Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: 0a2cdd1a-9619-46c3-9857-962ea95909a2
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: cd3720b1-f6ef-4508-b0c8-156763283a00
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: c981e870-a2ab-4f29-a96c-89fa336b6832
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column Segment
+		dataType: string
+		lineageTag: 667bb7ce-c97d-4f40-b401-1119710493ab
+		summarizeBy: none
+		sourceColumn: Segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ship Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 61a61224-e087-415b-b80d-598589d64548
+		summarizeBy: none
+		sourceColumn: Ship Date
+
+		variation Variation
+			isDefault
+			relationship: 7a50c477-2ec0-458f-a6ef-ec51dac10658
+			defaultHierarchy: LocalDateTable_a2c5d7cf-af93-4a63-8738-41111ab04b3a.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Ship Mode'
+		dataType: string
+		lineageTag: 864c7dfa-0b0e-4f10-86f6-8f9c3e1fdb5b
+		summarizeBy: none
+		sourceColumn: Ship Mode
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		lineageTag: 46b2fb0d-1319-4148-9e91-829a155e0a63
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	column lon
+		dataType: double
+		lineageTag: 151a2f3e-ec8f-4994-9408-5b157d379c2a
+		summarizeBy: sum
+		sourceColumn: lon
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column lat
+		dataType: double
+		lineageTag: 6277a004-dcbf-4092-abc8-1d10e0aece80
+		summarizeBy: sum
+		sourceColumn: lat
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition ListOfOrders = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\Tommy Naughton\Downloads\AmazingMartEU2Geo.xlsx"), null, true),
+				    ListOfOrders_Sheet = Source{[Item="ListOfOrders",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(ListOfOrders_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Order ID", type text}, {"Order Date", type date}, {"Customer Name", type text}, {"City", type text}, {"Country", type text}, {"Region", type text}, {"Segment", type text}, {"Ship Date", type date}, {"Ship Mode", type text}, {"State", type text}, {"lon", type number}, {"lat", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

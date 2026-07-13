@@ -1,0 +1,161 @@
+table Movie
+	lineageTag: 81e2eafd-db91-494d-97d5-71855929e20e
+
+	column MovieID
+		dataType: string
+		lineageTag: 97a9ea39-0244-44e7-a3fa-d76f15e019ed
+		summarizeBy: none
+		sourceColumn: MovieID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Original Title'
+		dataType: string
+		lineageTag: fb0d51f8-75b6-47d8-b2fa-c0d2ffd78116
+		summarizeBy: none
+		sourceColumn: Original Title
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Release year'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 1db87627-b701-42c8-83c4-b9656afc921d
+		summarizeBy: none
+		sourceColumn: Release year
+
+		variation Variation
+			isDefault
+			relationship: 2def068f-0532-40af-8aba-e5043ee2950f
+			defaultHierarchy: LocalDateTable_a13d11e0-ccb5-4783-99a7-dfe258b0dfd4.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Duration
+		dataType: int64
+		formatString: 0
+		lineageTag: ca9688fe-8860-476f-9aae-3ab93c073984
+		summarizeBy: sum
+		sourceColumn: Duration
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: dcc937d8-6839-4f23-9d68-ef69df1b7442
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Content Rating'
+		dataType: string
+		lineageTag: 74ca1e78-1778-4937-a21d-1d7c7f56bcc0
+		summarizeBy: none
+		sourceColumn: Content Rating
+
+		annotation SummarizationSetBy = Automatic
+
+	column Income
+		dataType: int64
+		formatString: 0
+		lineageTag: 70100357-df32-4f6c-978d-c073530109a1
+		summarizeBy: sum
+		sourceColumn: Income
+
+		annotation SummarizationSetBy = Automatic
+
+	column ' Votes '
+		dataType: int64
+		formatString: 0
+		lineageTag: 5cca6e23-cacf-44e7-b18b-7dac12e1d3d9
+		summarizeBy: sum
+		sourceColumn: " Votes "
+
+		annotation SummarizationSetBy = Automatic
+
+	column Score
+		dataType: double
+		lineageTag: 355f9978-8497-40ea-a508-47d0fce99021
+		summarizeBy: sum
+		sourceColumn: Score
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Movie = m
+		mode: import
+		source = ```
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\Tommy Naughton\AppData\Local\Packages\Microsoft.MicrosoftPowerBIDesktop_8wekyb3d8bbwe\AC\INetCache\E2B7II0F\messyimdb[1]"),[Delimiter=";", Columns=12, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}, {"Column2", type text}, {"Column3", type text}, {"Column4", type text}, {"Column5", type text}, {"Column6", type text}, {"Column7", type text}, {"Column8", type text}, {"Column9", type text}, {"Column10", type text}, {"Column11", type text}, {"Column12", type text}}),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Changed Type", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"IMBD title ID", type text}, {"Original titlÊ", type text}, {"Release year", type text}, {"Genrë¨", type text}, {"Duration", type text}, {"Country", type text}, {"Content Rating", type text}, {"Director", type text}, {"", type text}, {"Income", type text}, {" Votes ", type text}, {"Score", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type1",{{"Original titlÊ", "Original Title"}, {"Genrë¨", "Genre"}, {"IMBD title ID", "MovieID"}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Renamed Columns",{""}),
+				    #"Removed Blank Rows" = Table.SelectRows(#"Removed Columns", each not List.IsEmpty(List.RemoveMatchingItems(Record.FieldValues(_), {"", null}))),
+				    #"Removed Columns1" = Table.RemoveColumns(#"Removed Blank Rows",{"Genre", "Director"}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Removed Columns1",",",".",Replacer.ReplaceText,{"Score"}),
+				    #"Replaced Value1" = Table.ReplaceValue(#"Replaced Value","F","",Replacer.ReplaceText,{"Score"}),
+				    #"Replaced Value2" = Table.ReplaceValue(#"Replaced Value1","++","",Replacer.ReplaceText,{"Score"}),
+				    #"Replaced Value3" = Table.ReplaceValue(#"Replaced Value2","e-","",Replacer.ReplaceText,{"Score"}),
+				    #"Replaced Value4" = Table.ReplaceValue(#"Replaced Value3",":",".",Replacer.ReplaceText,{"Score"}),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Replaced Value4",{{"Score", "DirtyScore"}}),
+				    #"Added Custom" = Table.AddColumn(#"Renamed Columns1", "Score", each if Text.End([DirtyScore],1) = "." then 
+				                     Text.Start([DirtyScore],Text.Length([DirtyScore])-1) 
+				               else 
+				                     [DirtyScore]),
+				    #"Removed Columns2" = Table.RemoveColumns(#"Added Custom",{"DirtyScore"}),
+				    #"Replaced Value5" = Table.ReplaceValue(#"Removed Columns2","f","",Replacer.ReplaceText,{"Score"}),
+				    #"Replaced Value6" = Table.ReplaceValue(#"Replaced Value5","..",".",Replacer.ReplaceText,{"Score"}),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Replaced Value6",{{"Score", type number}}),
+				    #"Replaced Value7" = Table.ReplaceValue(#"Changed Type2",".","",Replacer.ReplaceText,{" Votes "}),
+				    #"Changed Type3" = Table.TransformColumnTypes(#"Replaced Value7",{{" Votes ", Int64.Type}}),
+				    #"Replaced Value8" = Table.ReplaceValue(#"Changed Type3","o","0",Replacer.ReplaceText,{"Income"}),
+				    #"Replaced Value9" = Table.ReplaceValue(#"Replaced Value8","$","",Replacer.ReplaceText,{"Income"}),
+				    #"Replaced Value10" = Table.ReplaceValue(#"Replaced Value9",",","",Replacer.ReplaceText,{"Income"}),
+				    #"Replaced Value11" = Table.ReplaceValue(#"Replaced Value10","$","",Replacer.ReplaceText,{"Income"}),
+				    #"Trimmed Text" = Table.TransformColumns(#"Replaced Value11",{{"Income", Text.Trim, type text}}),
+				    #"Changed Type4" = Table.TransformColumnTypes(#"Trimmed Text",{{"Income", Int64.Type}}),
+				    #"Replaced Value12" = Table.ReplaceValue(#"Changed Type4","Approved","Not Rated",Replacer.ReplaceText,{"Content Rating"}),
+				    #"Replaced Value13" = Table.ReplaceValue(#"Replaced Value12","#N/A","Not Rated",Replacer.ReplaceText,{"Content Rating"}),
+				    #"Replaced Value14" = Table.ReplaceValue(#"Replaced Value13","USA","United States",Replacer.ReplaceText,{"Country"}),
+				    #"Replaced Value15" = Table.ReplaceValue(#"Replaced Value14","US","United States",Replacer.ReplaceText,{"Country"}),
+				    #"Replaced Value16" = Table.ReplaceValue(#"Replaced Value15","UK","United Kingdom",Replacer.ReplaceText,{"Country"}),
+				    #"Replaced Value17" = Table.ReplaceValue(#"Replaced Value16","New Zesland","New Zealand",Replacer.ReplaceText,{"Country"}),
+				    #"Replaced Value18" = Table.ReplaceValue(#"Replaced Value17","Italy1","Italy",Replacer.ReplaceText,{"Country"}),
+				    #"Replaced Value19" = Table.ReplaceValue(#"Replaced Value18","Not applicable","0",Replacer.ReplaceText,{"Duration"}),
+				    #"Replaced Value20" = Table.ReplaceValue(#"Replaced Value19"," ","o",Replacer.ReplaceText,{"Duration"}),
+				    #"Replaced Value21" = Table.ReplaceValue(#"Replaced Value20","Nan","0",Replacer.ReplaceText,{"Duration"}),
+				    #"Replaced Value22" = Table.ReplaceValue(#"Replaced Value21","Inf","0",Replacer.ReplaceText,{"Duration"}),
+				    #"Replaced Value23" = Table.ReplaceValue(#"Replaced Value22","c","",Replacer.ReplaceText,{"Duration"}),
+				    #"Replaced Value24" = Table.ReplaceValue(#"Replaced Value23","NULL","0",Replacer.ReplaceText,{"Duration"}),
+				    #"Replaced Value25" = Table.ReplaceValue(#"Replaced Value24","-","0",Replacer.ReplaceText,{"Duration"}),
+				    #"Replaced Value26" = Table.ReplaceValue(#"Replaced Value25","NotoAppliable","0",Replacer.ReplaceText,{"Duration"}),
+				    #"Replaced Value27" = Table.ReplaceValue(#"Replaced Value26","o","0",Replacer.ReplaceText,{"Duration"}),
+				    #"Changed Type5" = Table.TransformColumnTypes(#"Replaced Value27",{{"Duration", Int64.Type}}),
+				    #"Replaced Value28" = Table.ReplaceValue(#"Changed Type5","The","",Replacer.ReplaceText,{"Release year"}),
+				    #"Replaced Value29" = Table.ReplaceValue(#"Replaced Value28",",","",Replacer.ReplaceText,{"Release year"}),
+				    #"Replaced Value30" = Table.ReplaceValue(#"Replaced Value29","rd","",Replacer.ReplaceText,{"Release year"}),
+				    #"Replaced Value31" = Table.ReplaceValue(#"Replaced Value30","th","",Replacer.ReplaceText,{"Release year"}),
+				    #"Replaced Value32" = Table.ReplaceValue(#"Replaced Value31","of","",Replacer.ReplaceText,{"Release year"}),
+				    #"Replaced Value33" = Table.ReplaceValue(#"Replaced Value32","year","",Replacer.ReplaceText,{"Release year"}),
+				    #"Replaced Value34" = Table.ReplaceValue(#"Replaced Value33","  "," ",Replacer.ReplaceText,{"Release year"}),
+				    #"Trimmed Text1" = Table.TransformColumns(#"Replaced Value34",{{"Release year", Text.Trim, type text}}),
+				    #"Replaced Value35" = Table.ReplaceValue(#"Trimmed Text1","","-",Replacer.ReplaceValue,{"Release year"}),
+				    #"Replaced Value36" = Table.ReplaceValue(#"Replaced Value35","--","-",Replacer.ReplaceText,{"Release year"}),
+				    #"Replaced Value37" = Table.ReplaceValue(#"Replaced Value36","marzo","March",Replacer.ReplaceText,{"Release year"}),
+				    #"Replaced Value38" = Table.ReplaceValue(#"Replaced Value37","/","-",Replacer.ReplaceText,{"Release year"}),
+				    #"Changed Type6" = Table.TransformColumnTypes(#"Replaced Value38",{{"Release year", type date}}),
+				    #"Replaced Errors" = Table.ReplaceErrorValues(#"Changed Type6", {{"Release year", #date(1900, 1, 1)}})
+				in
+				    #"Replaced Errors"
+				```
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

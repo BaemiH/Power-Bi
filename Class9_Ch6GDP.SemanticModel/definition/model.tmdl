@@ -1,0 +1,22 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["State GDP","State","GDP Category"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Calendar
+ref table DateTableTemplate_00cefe46-fd9f-4298-a0a1-a1a78b6cf7a3
+ref table 'State GDP'
+ref table State
+ref table 'GDP Category'
+
+ref cultureInfo en-US
+

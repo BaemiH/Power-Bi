@@ -1,0 +1,56 @@
+table State
+	lineageTag: e00f567f-4794-4552-8e5e-790a0b7d8e9b
+
+	column State
+		dataType: string
+		lineageTag: 82bd4c92-65c5-43dc-a85a-95da00bf2040
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Region Number'
+		dataType: string
+		lineageTag: 2565be9a-aa4d-4a62-a7cb-02882b15ae0f
+		summarizeBy: none
+		sourceColumn: Region Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 19dc6ec0-3780-43c7-a78c-0ea245281f84
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column StateID
+		dataType: int64
+		formatString: 0
+		lineageTag: fc9e9357-d7cf-4c68-96ad-e46b0cdddc82
+		summarizeBy: none
+		sourceColumn: StateID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition State = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(Web.Contents("https://tinyurl.com/SAGDP"),[Delimiter=",", Columns=30, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Promoted Headers",{"GeoName", "Region", "Region Name"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns"),
+				    #"Added Index" = Table.AddIndexColumn(#"Removed Duplicates", "Index", 0, 1, Int64.Type),
+				    #"Added Index1" = Table.AddIndexColumn(#"Added Index", "Index.1", 1, 1, Int64.Type),
+				    #"Removed Columns" = Table.RemoveColumns(#"Added Index1",{"Index", "Index.1"}),
+				    #"Added Index2" = Table.AddIndexColumn(#"Removed Columns", "Index", 1, 1, Int64.Type),
+				    #"Renamed Columns" = Table.RenameColumns(#"Added Index2",{{"Index", "StateID"}, {"GeoName", "State"}, {"Region", "Region Number"}, {"Region Name", "Region"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "57302c054b1560e4aef7",
+  "position": {
+    "x": 0,
+    "y": 0,
+    "z": 0,
+    "height": 282.5938566552901,
+    "width": 358.15699658703073,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "EXERCISE 8 5"
+                    }
+                  },
+                  "Property": "ReasonForLeaving"
+                }
+              },
+              "queryRef": "EXERCISE 8 5.ReasonForLeaving",
+              "nativeQueryRef": "ReasonForLeaving"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "EXERCISE 8 5"
+                    }
+                  },
+                  "Property": "Impact"
+                }
+              },
+              "queryRef": "EXERCISE 8 5.Impact",
+              "nativeQueryRef": "Impact"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "EXERCISE 8 5"
+                    }
+                  },
+                  "Property": "HRBP"
+                }
+              },
+              "queryRef": "EXERCISE 8 5.HRBP",
+              "nativeQueryRef": "HRBP"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "EXERCISE 8 5"
+                    }
+                  },
+                  "Property": "ExitSurvey"
+                }
+              },
+              "queryRef": "EXERCISE 8 5.ExitSurvey",
+              "nativeQueryRef": "ExitSurvey"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "EXERCISE 8 5"
+                  }
+                },
+                "Property": "Impact"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

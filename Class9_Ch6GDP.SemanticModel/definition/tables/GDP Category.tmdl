@@ -1,0 +1,37 @@
+table 'GDP Category'
+	lineageTag: 2418e083-d2c7-4eea-8edf-a571dd30472a
+
+	column GDPCategoryID
+		dataType: string
+		lineageTag: 0ce2c64f-23eb-4736-8307-4c2bf2c3f741
+		summarizeBy: none
+		sourceColumn: GDPCategoryID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Description
+		dataType: string
+		lineageTag: 01b442de-7cb3-4d26-97ff-34a546472b7e
+		summarizeBy: none
+		sourceColumn: Description
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'GDP Category' = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(Web.Contents("https://tinyurl.com/SAGDP"),[Delimiter=",", Columns=30, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Promoted Headers",{"GeoName", "LineCode", "Description"}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Removed Other Columns",{"GeoName"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Columns"),
+				    #"Extracted Text Before Delimiter" = Table.TransformColumns(#"Removed Duplicates", {{"Description", each Text.BeforeDelimiter(_, "("), type text}, {"LineCode", each Text.BeforeDelimiter(_, "("), type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Extracted Text Before Delimiter",{{"LineCode", "GDPCategoryID"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

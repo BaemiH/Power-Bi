@@ -1,0 +1,25 @@
+table DimTableCountry
+	lineageTag: e9a62ffa-243e-451e-bdf7-a4a7c14ad2bb
+
+	column Country
+		dataType: string
+		lineageTag: 53fb9a6b-e090-4912-9b6e-e1064a69d58a
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimTableCountry-8db1207d-74b1-4be1-a3fd-ad9a9ed30618 = m
+		mode: import
+		source =
+				let
+				    Source = TransactionTable,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Country"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns")
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

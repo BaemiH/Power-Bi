@@ -1,0 +1,25 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["TransactionTable","DimTableSegment","DimTableCountry","DimTableProduct","DimTableDisCat"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table TransactionTable
+ref table DateTableTemplate_ef9b6540-41c5-4726-9e55-db65c1a7533a
+ref table DimTableSegment
+ref table DimTableCountry
+ref table DimTableProduct
+ref table DimTableDisCat
+ref table DimDateTable
+ref table LocalDateTable_c4e93afb-6fe2-4bd7-88d2-9e7fa73f9558
+
+ref cultureInfo en-US
+

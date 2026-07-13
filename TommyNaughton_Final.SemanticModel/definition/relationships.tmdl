@@ -1,0 +1,33 @@
+relationship fbc12ad0-29ab-4c7a-aad0-367ae3f3ad2e
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Date.Date
+	toColumn: LocalDateTable_0872204c-f939-4d02-ad8e-064fd3d89667.Date
+
+relationship AutoDetected_114a6e3f-4959-4112-9047-c7c5657b9bfc
+	fromColumn: Metrics.'Sub Category ID'
+	toColumn: Category.'Sub Category ID'
+
+relationship AutoDetected_a293443f-9d35-46c4-9f29-2b30587261ef
+	fromColumn: Metrics.'Defect ID'
+	toColumn: Defect.'Defect ID'
+
+relationship AutoDetected_9607e178-498e-4d95-9110-cdd8be0fd08c
+	fromColumn: Metrics.'Material Type ID'
+	toColumn: 'Material Type'.'Material Type ID'
+
+relationship AutoDetected_61fa783f-ff5c-43f0-9151-06e7530746a9
+	fromColumn: Metrics.'Plant ID'
+	toColumn: Plant.'Plant ID'
+
+relationship AutoDetected_67150a76-d6cf-4625-9336-6f5215d86ec2
+	fromColumn: Metrics.'Vendor ID'
+	toColumn: Vendor.'Vendor ID'
+
+relationship c038a79e-ad5e-5026-0c5f-a3b6bb33b21f
+	fromColumn: Metrics.Date
+	toColumn: Date.Date
+
+relationship 613c0405-fa73-1f64-9f8d-0a4fd6290a2b
+	fromColumn: Metrics.'Defect Type ID'
+	toColumn: DefectType.'Defect Type ID'
+

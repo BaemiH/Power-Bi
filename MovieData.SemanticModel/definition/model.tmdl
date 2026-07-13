@@ -1,0 +1,24 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["Movie","MoviesGenres","Genre","MoviesDirectors","Director"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Movie
+ref table MoviesGenres
+ref table Genre
+ref table MoviesDirectors
+ref table Director
+ref table DateTableTemplate_120610c7-4fb5-406d-9b32-e60f839859f1
+ref table LocalDateTable_a13d11e0-ccb5-4783-99a7-dfe258b0dfd4
+
+ref cultureInfo en-US
+

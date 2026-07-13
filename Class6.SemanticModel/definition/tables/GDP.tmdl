@@ -1,0 +1,108 @@
+table GDP
+	lineageTag: bb39b246-afb4-4a30-a878-20877d1aa5fc
+
+	column 'GDP Category'
+		dataType: string
+		lineageTag: 894d17f9-a56b-48e8-b84a-87d16ddbb5b6
+		summarizeBy: none
+		sourceColumn: GDP Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 7ad27c20-8bbb-4d3d-b355-8927eabb4234
+		summarizeBy: none
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = User
+
+	column Value
+		dataType: double
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 8c417458-87ef-4571-85fa-178692095f29
+		summarizeBy: sum
+		sourceColumn: Value
+
+		annotation SummarizationSetBy = Automatic
+
+	column Index = CONCATENATE ( 'GDP'[GDP Category], 'GDP'[Year])
+		isHidden
+		lineageTag: a59b7755-187a-44ca-bdc9-b44c37c21efe
+		summarizeBy: none
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Previous Year' = GDP[Year] - 1
+		isHidden
+		formatString: 0
+		lineageTag: 8765d7c0-82e2-4942-89e4-b14522aecc87
+		summarizeBy: sum
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Previous Index' = CONCATENATE ( 'GDP'[GDP Category], 'GDP'[Previous Year])
+		isHidden
+		lineageTag: c998aff9-6a03-4d78-a72f-5231f1e65883
+		summarizeBy: none
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Previous Value' = LOOKUPVALUE ( 'GDP'[Value], 'GDP'[Index],  'GDP'[Previous Index] )
+		lineageTag: d35c51a6-fd2a-4fe4-89cf-ebc1090a87b6
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Change =
+			
+			IF (ISBLANK ( 'GDP'[Previous Value] ) = FALSE,'GDP'[Value] - 'GDP'[Previous Value])
+		lineageTag: 7f4ff35f-e98a-45d0-a0c1-1df1de1317f8
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Change %' = DIVIDE ( 'GDP'[Change], 'GDP'[Value] )
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 98dd7b9c-fecc-4953-8ec3-39fb4dba430e
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition GDP = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("T:\Users\tnaughton\Downloads\GDP.xlsx"), null, true),
+				    Table_Sheet = Source{[Item="Table",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Table_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Table 1.1.5. Gross Domestic Product", type text}, {"Column2", type text}, {"Column3", Int64.Type}, {"Column4", Int64.Type}, {"Column5", Int64.Type}, {"Column6", Int64.Type}, {"Column7", Int64.Type}, {"Column8", Int64.Type}, {"Column9", Int64.Type}, {"Column10", Int64.Type}, {"Column11", Int64.Type}, {"Column12", Int64.Type}, {"Column13", Int64.Type}, {"Column14", Int64.Type}, {"Column15", Int64.Type}, {"Column16", Int64.Type}, {"Column17", Int64.Type}, {"Column18", Int64.Type}, {"Column19", Int64.Type}, {"Column20", Int64.Type}, {"Column21", Int64.Type}, {"Column22", Int64.Type}, {"Column23", Int64.Type}, {"Column24", Int64.Type}, {"Column25", Int64.Type}, {"Column26", Int64.Type}, {"Column27", Int64.Type}, {"Column28", Int64.Type}, {"Column29", Int64.Type}, {"Column30", Int64.Type}, {"Column31", Int64.Type}, {"Column32", Int64.Type}, {"Column33", Int64.Type}, {"Column34", Int64.Type}, {"Column35", Int64.Type}, {"Column36", Int64.Type}, {"Column37", Int64.Type}, {"Column38", Int64.Type}, {"Column39", Int64.Type}, {"Column40", Int64.Type}, {"Column41", Int64.Type}, {"Column42", Int64.Type}, {"Column43", Int64.Type}, {"Column44", Int64.Type}, {"Column45", Int64.Type}, {"Column46", Int64.Type}, {"Column47", Int64.Type}, {"Column48", Int64.Type}, {"Column49", Int64.Type}, {"Column50", Int64.Type}, {"Column51", Int64.Type}, {"Column52", Int64.Type}, {"Column53", Int64.Type}, {"Column54", Int64.Type}, {"Column55", Int64.Type}, {"Column56", Int64.Type}, {"Column57", Int64.Type}, {"Column58", Int64.Type}, {"Column59", Int64.Type}, {"Column60", Int64.Type}, {"Column61", Int64.Type}, {"Column62", Int64.Type}, {"Column63", Int64.Type}, {"Column64", Int64.Type}, {"Column65", Int64.Type}, {"Column66", Int64.Type}, {"Column67", Int64.Type}, {"Column68", Int64.Type}, {"Column69", Int64.Type}, {"Column70", Int64.Type}, {"Column71", Int64.Type}, {"Column72", Int64.Type}, {"Column73", Int64.Type}, {"Column74", Int64.Type}, {"Column75", Int64.Type}, {"Column76", Int64.Type}, {"Column77", Int64.Type}, {"Column78", Int64.Type}, {"Column79", Int64.Type}, {"Column80", Int64.Type}, {"Column81", Int64.Type}, {"Column82", Int64.Type}, {"Column83", Int64.Type}, {"Column84", Int64.Type}, {"Column85", Int64.Type}, {"Column86", Int64.Type}, {"Column87", Int64.Type}, {"Column88", Int64.Type}, {"Column89", Int64.Type}, {"Column90", Int64.Type}, {"Column91", Int64.Type}, {"Column92", Int64.Type}, {"Column93", Int64.Type}, {"Column94", Int64.Type}, {"Column95", Int64.Type}, {"Column96", Int64.Type}}),
+				    #"Removed Top Rows" = Table.Skip(#"Changed Type",4),
+				    #"Removed Columns" = Table.RemoveColumns(#"Removed Top Rows",{"Table 1.1.5. Gross Domestic Product"}),
+				    #"Promoted Headers1" = Table.PromoteHeaders(#"Removed Columns", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers1",{{"", type text}, {"1929", Int64.Type}, {"1930", Int64.Type}, {"1931", Int64.Type}, {"1932", Int64.Type}, {"1933", Int64.Type}, {"1934", Int64.Type}, {"1935", Int64.Type}, {"1936", Int64.Type}, {"1937", Int64.Type}, {"1938", Int64.Type}, {"1939", Int64.Type}, {"1940", Int64.Type}, {"1941", Int64.Type}, {"1942", Int64.Type}, {"1943", Int64.Type}, {"1944", Int64.Type}, {"1945", Int64.Type}, {"1946", Int64.Type}, {"1947", Int64.Type}, {"1948", Int64.Type}, {"1949", Int64.Type}, {"1950", Int64.Type}, {"1951", Int64.Type}, {"1952", Int64.Type}, {"1953", Int64.Type}, {"1954", Int64.Type}, {"1955", Int64.Type}, {"1956", Int64.Type}, {"1957", Int64.Type}, {"1958", Int64.Type}, {"1959", Int64.Type}, {"1960", Int64.Type}, {"1961", Int64.Type}, {"1962", Int64.Type}, {"1963", Int64.Type}, {"1964", Int64.Type}, {"1965", Int64.Type}, {"1966", Int64.Type}, {"1967", Int64.Type}, {"1968", Int64.Type}, {"1969", Int64.Type}, {"1970", Int64.Type}, {"1971", Int64.Type}, {"1972", Int64.Type}, {"1973", Int64.Type}, {"1974", Int64.Type}, {"1975", Int64.Type}, {"1976", Int64.Type}, {"1977", Int64.Type}, {"1978", Int64.Type}, {"1979", Int64.Type}, {"1980", Int64.Type}, {"1981", Int64.Type}, {"1982", Int64.Type}, {"1983", Int64.Type}, {"1984", Int64.Type}, {"1985", Int64.Type}, {"1986", Int64.Type}, {"1987", Int64.Type}, {"1988", Int64.Type}, {"1989", Int64.Type}, {"1990", Int64.Type}, {"1991", Int64.Type}, {"1992", Int64.Type}, {"1993", Int64.Type}, {"1994", Int64.Type}, {"1995", Int64.Type}, {"1996", Int64.Type}, {"1997", Int64.Type}, {"1998", Int64.Type}, {"1999", Int64.Type}, {"2000", Int64.Type}, {"2001", Int64.Type}, {"2002", Int64.Type}, {"2003", Int64.Type}, {"2004", Int64.Type}, {"2005", Int64.Type}, {"2006", Int64.Type}, {"2007", Int64.Type}, {"2008", Int64.Type}, {"2009", Int64.Type}, {"2010", Int64.Type}, {"2011", Int64.Type}, {"2012", Int64.Type}, {"2013", Int64.Type}, {"2014", Int64.Type}, {"2015", Int64.Type}, {"2016", Int64.Type}, {"2017", Int64.Type}, {"2018", Int64.Type}, {"2019", Int64.Type}, {"2020", Int64.Type}, {"2021", Int64.Type}, {"2022", Int64.Type}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type1",{{"", "GDP Category"}}),
+				    #"Removed Top Rows1" = Table.Skip(#"Renamed Columns",1),
+				    #"Filtered Rows" = Table.SelectRows(#"Removed Top Rows1", each ([GDP Category] = "Government consumption expenditures and gross investment" or [GDP Category] = "Gross private domestic investment" or [GDP Category] = "Net exports of goods and services" or [GDP Category] = "Personal consumption expenditures")),
+				    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Filtered Rows", {"GDP Category"}, "Attribute", "Value"),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Unpivoted Other Columns",{{"Attribute", "Year"}}),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Renamed Columns1",{{"Year", Int64.Type}}),
+				    #"Multiplied Column" = Table.TransformColumns(#"Changed Type2", {{"Value", each _ * 1000000, type number}})
+				in
+				    #"Multiplied Column"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,135 @@
+table DimDateTable
+	lineageTag: cd4eaccf-d20a-42ef-997d-d457fd035d5e
+
+	column Date
+		formatString: General Date
+		lineageTag: e4d12d91-0969-4183-a866-36f8c8216b65
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		variation Variation
+			isDefault
+			relationship: 1a266e46-a3b2-4745-be61-045ac4713189
+			defaultHierarchy: LocalDateTable_c4e93afb-6fe2-4bd7-88d2-9e7fa73f9558.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column DateAsInteger
+		lineageTag: 2a946183-c113-4b2b-8bd8-59eabe4936b9
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DateAsInteger]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		formatString: 0
+		lineageTag: 5bbef96f-dd83-4959-9fb0-e6869d55c1b4
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthNo
+		lineageTag: 4a56850e-526f-41c5-8a5a-cbccbeb08ae1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [MonthNo]
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearMonthNo
+		lineageTag: ab044848-0fe3-49f7-96a3-1c4271308a54
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [YearMonthNo]
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearMonth
+		lineageTag: 610c37ea-6702-4702-b4a0-3e59109bee8f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [YearMonth]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Short'
+		lineageTag: af4e1b53-8813-4a11-b58a-dcf3499c0c9f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month Short]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Long'
+		lineageTag: 5adaeb03-6dc1-4415-9bca-4ec128b6da16
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month Long]
+
+		annotation SummarizationSetBy = Automatic
+
+	column WeekNo
+		formatString: 0
+		lineageTag: 2009e7d9-390e-4681-9bb4-bde5ca3ec130
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [WeekNo]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Weekday
+		lineageTag: 789f1ce0-cc0c-4c71-ae95-37d116fdabb0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Weekday]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		lineageTag: 946e994a-0629-40e7-9ac7-d6f2aa99bd42
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Quarter]
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearQuarter
+		lineageTag: df9f6f3c-6d96-4c3b-95ae-9fe2e8219a78
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [YearQuarter]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month-Year
+		lineageTag: 9cd0d0f3-f0bf-4c49-aeca-83f0ac7a8ab1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month-Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimDateTable-8bae9646-3e9d-4f14-b089-190e392db6ec = calculated
+		mode: import
+		source = ```
+				ADDCOLUMNS( CALENDARAUTO(), //CALENDAR(min('Demand Template'[date]), max('Demand Template'[Date])),
+				"DateAsInteger", FORMAT ( [Date], "YYYYMMDD" ), 
+				"Year",         YEAR ( [Date] ), 
+				"MonthNo",      FORMAT ( [Date], "MM" ), 
+				"YearMonthNo",  FORMAT ( [Date], "YYYY/MM" ), 
+				"YearMonth",    FORMAT ( [Date], "YYYY/mmm" ), 
+				"Month Short",  FORMAT ( [Date], "mmm" ), 
+				"Month Long",   FORMAT ( [Date], "mmmm" ), 
+				"WeekNo",       WEEKDAY( [Date] ), 
+				"Weekday",      FORMAT ( [Date], "dddd" ), 
+				"Quarter", "Q" & FORMAT( [Date], "Q" ), 
+				"YearQuarter",  FORMAT ( [Date], "YYYY" ) & "/Q" & FORMAT ( [Date], "Q" ),
+				"Month-Year",   FORMAT ([Date], "MMM-YY"))
+				```
+
+	annotation PBI_Id = 5891dc5cc876426da970171a4642f4ea
+

@@ -1,0 +1,56 @@
+table MoviesGenres
+	isHidden
+	lineageTag: 03c2db51-4e2d-47ea-be14-4fe20b18f6be
+
+	column MovieID
+		dataType: string
+		isHidden
+		lineageTag: 7b20966f-be89-409d-abb8-40e76ff636c7
+		summarizeBy: none
+		sourceColumn: MovieID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GenreID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3a7894a3-bac2-40b2-884a-bbc91afb5a28
+		summarizeBy: none
+		sourceColumn: GenreID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition MoviesGenres = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\Tommy Naughton\AppData\Local\Packages\Microsoft.MicrosoftPowerBIDesktop_8wekyb3d8bbwe\AC\INetCache\E2B7II0F\messyimdb[1]"),[Delimiter=";", Columns=12, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}, {"Column2", type text}, {"Column3", type text}, {"Column4", type text}, {"Column5", type text}, {"Column6", type text}, {"Column7", type text}, {"Column8", type text}, {"Column9", type text}, {"Column10", type text}, {"Column11", type text}, {"Column12", type text}}),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Changed Type", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"IMBD title ID", type text}, {"Original titlÊ", type text}, {"Release year", type text}, {"Genrë¨", type text}, {"Duration", type text}, {"Country", type text}, {"Content Rating", type text}, {"Director", type text}, {"", type text}, {"Income", type text}, {" Votes ", type text}, {"Score", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type1",{{"Original titlÊ", "Original Title"}, {"Genrë¨", "Genre"}, {"IMBD title ID", "MovieID"}}),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Renamed Columns",{"MovieID", "Genre"}),
+				    #"Removed Blank Rows" = Table.SelectRows(#"Removed Other Columns", each not List.IsEmpty(List.RemoveMatchingItems(Record.FieldValues(_), {"", null}))),
+				    #"Split Column by Delimiter" = Table.SplitColumn(#"Removed Blank Rows", "Genre", Splitter.SplitTextByDelimiter(",", QuoteStyle.Csv), {"Genre.1", "Genre.2", "Genre.3"}),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Split Column by Delimiter",{{"Genre.1", type text}, {"Genre.2", type text}, {"Genre.3", type text}}),
+				    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Changed Type2", {"MovieID"}, "Attribute", "Value"),
+				    #"Removed Columns" = Table.RemoveColumns(#"Unpivoted Other Columns",{"Attribute"}),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Removed Columns",{{"Value", "Genre Name"}}),
+				    #"Trimmed Text" = Table.TransformColumns(#"Renamed Columns1",{{"Genre Name", Text.Trim, type text}}),
+				    #"Merged Queries" = Table.NestedJoin(#"Trimmed Text", {"Genre Name"}, Genre, {"Genre Name"}, "Genre", JoinKind.LeftOuter),
+				    #"Expanded Genre" = Table.ExpandTableColumn(#"Merged Queries", "Genre", {"GenreID"}, {"GenreID"}),
+				    #"Removed Columns1" = Table.RemoveColumns(#"Expanded Genre",{"Genre Name"})
+				in
+				    #"Removed Columns1"
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

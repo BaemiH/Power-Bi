@@ -1,0 +1,74 @@
+table Date
+	lineageTag: 5eef8f45-3940-46ee-bb55-bdd78de3c8e9
+
+	column Date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: d3a2c99f-6b0d-4d97-860e-e69f617f2784
+		summarizeBy: none
+		sourceColumn: Date
+
+		variation Variation
+			isDefault
+			relationship: fbc12ad0-29ab-4c7a-aad0-367ae3f3ad2e
+			defaultHierarchy: LocalDateTable_0872204c-f939-4d02-ad8e-064fd3d89667.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 41489361-7595-4cb5-a961-3b3a46228270
+		summarizeBy: sum
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: a191d475-3c60-4d2b-8213-49cbdcd89dee
+		summarizeBy: sum
+		sourceColumn: MonthNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearaMthNo
+		dataType: int64
+		formatString: 0
+		lineageTag: 60fc9c05-0fd2-4cc9-8874-bc311486e855
+		summarizeBy: sum
+		sourceColumn: YearaMthNo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		dataType: string
+		lineageTag: 5f8a7d03-abf6-4d75-a1fd-2976a7da43bd
+		summarizeBy: none
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column Week
+		dataType: int64
+		formatString: 0
+		lineageTag: ffb39880-6cee-427c-845f-d11b10f79c3d
+		summarizeBy: sum
+		sourceColumn: Week
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Date = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("T:\Users\tnaughton\Downloads\Data File J35 v2-1.xlsx"), null, true),
+				    Date_Sheet = Source{[Item="Date",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Date_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type datetime}, {"Year", Int64.Type}, {"MonthNumber", Int64.Type}, {"YearaMthNo", Int64.Type}, {"Month", type text}, {"Week", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

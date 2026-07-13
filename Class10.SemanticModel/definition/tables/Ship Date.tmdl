@@ -1,0 +1,162 @@
+table 'Ship Date'
+	lineageTag: 91a7efe9-d969-44eb-a910-56ed09e26962
+	dataCategory: Time
+
+	column DateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3f1132cd-a359-42c2-8ebc-60c7c251a70c
+		summarizeBy: none
+		sourceColumn: DateKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ShipDate
+		dataType: dateTime
+		isKey
+		formatString: Long Date
+		lineageTag: c6c41c93-1f1b-456b-a8ea-c544cb1576b0
+		summarizeBy: none
+		sourceColumn: ShipDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DayNumberOfWeek
+		dataType: int64
+		formatString: 0
+		lineageTag: dfad5032-0759-4c81-9774-941892dfcc97
+		summarizeBy: sum
+		sourceColumn: DayNumberOfWeek
+
+		annotation SummarizationSetBy = Automatic
+
+	column EnglishDayNameOfWeek
+		dataType: string
+		lineageTag: 4c244719-33e7-488a-adf0-57f8a7842296
+		summarizeBy: none
+		sourceColumn: EnglishDayNameOfWeek
+		sortByColumn: DayNumberOfWeek
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayNumberOfMonth
+		dataType: int64
+		formatString: 0
+		lineageTag: e2b5bf2e-35d9-47af-bb55-7b56986ea8f6
+		summarizeBy: sum
+		sourceColumn: DayNumberOfMonth
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayNumberOfYear
+		dataType: int64
+		formatString: 0
+		lineageTag: 8b39075f-6ea4-4570-a18f-ecf4c68f848d
+		summarizeBy: sum
+		sourceColumn: DayNumberOfYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column WeekNumberOfYear
+		dataType: int64
+		formatString: 0
+		lineageTag: dde3855c-e504-4d58-a359-26cedf4ed2d0
+		summarizeBy: sum
+		sourceColumn: WeekNumberOfYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column EnglishMonthName
+		dataType: string
+		lineageTag: 9373b161-b878-49a5-b3c5-32eb586661b5
+		summarizeBy: none
+		sourceColumn: EnglishMonthName
+		sortByColumn: MonthNumberOfYear
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthNumberOfYear
+		dataType: int64
+		formatString: 0
+		lineageTag: d2646c33-5bc7-46e9-9b8b-30f9f6e42751
+		summarizeBy: sum
+		sourceColumn: MonthNumberOfYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarQuarter
+		dataType: int64
+		formatString: 0
+		lineageTag: 477954f5-7cb3-4638-8d46-d16ba152b3fa
+		summarizeBy: sum
+		sourceColumn: CalendarQuarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarYear
+		dataType: int64
+		formatString: 0
+		lineageTag: bdbca0fa-c76e-4010-9453-06450f430659
+		summarizeBy: sum
+		sourceColumn: CalendarYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarSemester
+		dataType: int64
+		formatString: 0
+		lineageTag: 59d851d4-c3ad-48c2-94ea-7afb81c37c52
+		summarizeBy: sum
+		sourceColumn: CalendarSemester
+
+		annotation SummarizationSetBy = Automatic
+
+	column FiscalQuarter
+		dataType: int64
+		formatString: 0
+		lineageTag: 636e3df7-000f-477d-99df-ccc7093e2379
+		summarizeBy: sum
+		sourceColumn: FiscalQuarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column FiscalYear
+		dataType: int64
+		formatString: 0
+		lineageTag: 9a8e92e4-f48e-44f9-b8cd-91637c2b5525
+		summarizeBy: sum
+		sourceColumn: FiscalYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column FiscalSemester
+		dataType: int64
+		formatString: 0
+		lineageTag: ab1e3c65-ba0c-43a8-8c72-a0a56ab34dd1
+		summarizeBy: sum
+		sourceColumn: FiscalSemester
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Ship Date' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("bpbi.database.windows.net", "BPBI"),
+				    #"DW_Ship Date" = Source{[Schema="DW",Item="Ship Date"]}[Data]
+				in
+				    #"DW_Ship Date"
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

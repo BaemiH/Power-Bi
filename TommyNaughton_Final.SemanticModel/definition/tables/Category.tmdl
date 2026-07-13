@@ -1,0 +1,41 @@
+table Category
+	lineageTag: 97565306-eaf5-472d-9642-7a588a22af5a
+
+	column 'Sub Category ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 2603b0fa-3dae-4516-b385-c1a16a6b24ea
+		summarizeBy: none
+		sourceColumn: Sub Category ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 9b4ffaa1-6760-4d63-957f-bd9af3fbd1bc
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sub Category'
+		dataType: string
+		lineageTag: 8120af9d-6050-4e6d-8bcb-86533e8eeb55
+		summarizeBy: none
+		sourceColumn: Sub Category
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Category = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("T:\Users\tnaughton\Downloads\Data File J35 v2-1.xlsx"), null, true),
+				    Category_Sheet = Source{[Item="Category",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Category_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Sub Category ID", Int64.Type}, {"Category", type text}, {"Sub Category", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

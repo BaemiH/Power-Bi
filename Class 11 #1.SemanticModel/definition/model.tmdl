@@ -1,0 +1,22 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["ListOfOrders","OrderBreakdown"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table ListOfOrders
+ref table DateTableTemplate_a67a87cb-fdc9-41c0-92da-a70aab34f313
+ref table LocalDateTable_13e11ebe-853a-4a84-ab44-aab5537bd3e0
+ref table LocalDateTable_a2c5d7cf-af93-4a63-8738-41111ab04b3a
+ref table OrderBreakdown
+
+ref cultureInfo en-US
+

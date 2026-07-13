@@ -1,0 +1,33 @@
+table Defect
+	lineageTag: 5dd4046f-462e-46a2-a13a-6213fcb1fd81
+
+	column 'Defect ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: db0bded2-6606-4efc-b6e0-920071664d66
+		summarizeBy: none
+		sourceColumn: Defect ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Defect
+		dataType: string
+		lineageTag: 1caa4d7a-6827-4103-aa4c-77bc4b9fca2d
+		summarizeBy: none
+		sourceColumn: Defect
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Defect = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("T:\Users\tnaughton\Downloads\Data File J35 v2-1.xlsx"), null, true),
+				    Defect_Sheet = Source{[Item="Defect",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Defect_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Defect ID", Int64.Type}, {"Defect", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

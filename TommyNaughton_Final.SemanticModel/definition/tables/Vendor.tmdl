@@ -1,0 +1,33 @@
+table Vendor
+	lineageTag: 1262f86a-a68d-4d0a-8666-561051150f2c
+
+	column 'Vendor ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: e7ee47a2-37e8-4b44-b1d2-add7c2152085
+		summarizeBy: none
+		sourceColumn: Vendor ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Vendor
+		dataType: string
+		lineageTag: 46b02b31-4560-4933-a296-ced04666f8df
+		summarizeBy: none
+		sourceColumn: Vendor
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Vendor = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("T:\Users\tnaughton\Downloads\Data File J35 v2-1.xlsx"), null, true),
+				    Vendor_Sheet = Source{[Item="Vendor",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Vendor_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Vendor ID", Int64.Type}, {"Vendor", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

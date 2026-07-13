@@ -1,0 +1,40 @@
+table DefectType
+	lineageTag: f0f2c19b-47b5-48fb-8706-de6439a84209
+
+	column 'Defect Type ID'
+		formatString: 0
+		lineageTag: 8226fce2-c304-4c08-9e14-80bae1a5c15c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Defect Type ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Defect Type' = ```
+			SWITCH(
+			    TRUE(), 
+			    'DefectType'[Defect Type ID] = 3, "Impact",    
+			    'DefectType'[Defect Type ID] = 1, "No Impact", 
+			    'DefectType'[Defect Type ID] = 4, "Rejected",          
+			    "Other"                                              
+			)
+			```
+		lineageTag: cedcbf44-5b0e-4fa7-89c7-46d4ae36aa4d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DefectType = calculated
+		mode: import
+		source = ```
+				DISTINCT(
+				    SELECTCOLUMNS(
+				        'Metrics',
+				        "Defect Type ID",    
+				        'Metrics'[Defect Type ID]   
+				)
+				)
+				```
+
+	annotation PBI_Id = 4f01cfedc32240b8a2c2a7d2d3655f9d
+

@@ -1,0 +1,87 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 902.38305001469394,
+            "y": 539.01488922040016
+          },
+          "nodeIndex": "Genre",
+          "nodeLineageTag": "37f8fb18-4ec8-4b10-ba88-b7841bf850f3",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 10,
+            "y": -10
+          },
+          "nodeIndex": "Movie",
+          "nodeLineageTag": "81e2eafd-db91-494d-97d5-71855929e20e",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 324.2015611931854,
+            "y": 537.85958718024608
+          },
+          "nodeIndex": "MoviesGenres",
+          "nodeLineageTag": "03c2db51-4e2d-47ea-be14-4fe20b18f6be",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1006.3830500146939,
+            "y": 7.507444610200082
+          },
+          "nodeIndex": "Director",
+          "nodeLineageTag": "4ac4aeef-ffed-46c5-981d-cd5d647904d3",
+          "size": {
+            "height": 145,
+            "width": 240
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 408.38305001469394,
+            "y": 18.507444610200082
+          },
+          "nodeIndex": "MoviesDirectors",
+          "nodeLineageTag": "83e29438-f78b-4964-834d-44b5a8caccd4",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

@@ -1,0 +1,66 @@
+table 'State GDP'
+	lineageTag: ffb0a699-96f7-4b6d-bb5c-634f841c1f1c
+
+	column StateID
+		dataType: int64
+		formatString: 0
+		lineageTag: 11fa8c94-a9a2-4e42-944c-7bdaa545636b
+		summarizeBy: none
+		sourceColumn: StateID
+
+		annotation SummarizationSetBy = Automatic
+
+	column GDPCategoryID
+		dataType: string
+		lineageTag: 77d1f1a7-e71f-48a3-bc34-8fceb384d5f0
+		summarizeBy: none
+		sourceColumn: GDPCategoryID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarID
+		dataType: int64
+		formatString: 0
+		lineageTag: 8101d55b-c47a-4ab2-bd47-fdf89ef08c42
+		summarizeBy: none
+		sourceColumn: CalendarID
+
+		annotation SummarizationSetBy = Automatic
+
+	column GDPValue
+		dataType: double
+		lineageTag: c7ed097e-1903-44ce-bb04-6ab0d0a305d0
+		summarizeBy: sum
+		sourceColumn: GDPValue
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'State GDP' = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(Web.Contents("https://tinyurl.com/SAGDP"),[Delimiter=",", Columns=30, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers",{{"GeoName", "State"}}),
+				    #"Merged Queries" = Table.NestedJoin(#"Renamed Columns", {"State"}, State, {"State"}, "State.1", JoinKind.LeftOuter),
+				    #"Expanded State.1" = Table.ExpandTableColumn(#"Merged Queries", "State.1", {"StateID"}, {"StateID"}),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Expanded State.1",{"StateID", "State", "Region", "Region Name", "LineCode", "Description", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Reordered Columns",{"State", "Region", "Region Name"}),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Removed Columns",{{"LineCode", "GDPCategoryID"}}),
+				    #"Removed Columns1" = Table.RemoveColumns(#"Renamed Columns1",{"Description"}),
+				    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Removed Columns1", {"StateID", "GDPCategoryID"}, "Attribute", "Value"),
+				    #"Renamed Columns2" = Table.RenameColumns(#"Unpivoted Other Columns",{{"Attribute", "Year"}}),
+				    #"Added Suffix" = Table.TransformColumns(#"Renamed Columns2", {{"Year", each _ & "1231", type text}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Added Suffix",{{"Year", Int64.Type}}),
+				    #"Renamed Columns3" = Table.RenameColumns(#"Changed Type",{{"Year", "CalendarID"}, {"Value", "GDPValue"}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Renamed Columns3",{{"GDPValue", Int64.Type}}),
+				    #"Multiplied Column" = Table.TransformColumns(#"Changed Type1", {{"GDPValue", each _ * 1000000, type number}})
+				in
+				    #"Multiplied Column"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

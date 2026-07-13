@@ -1,0 +1,14 @@
+relationship 358709bd-14d9-43c4-8a6f-86eb00175bd3
+	joinOnDateBehavior: datePartOnly
+	fromColumn: ListOfOrders.'Order Date'
+	toColumn: LocalDateTable_13e11ebe-853a-4a84-ab44-aab5537bd3e0.Date
+
+relationship 7a50c477-2ec0-458f-a6ef-ec51dac10658
+	joinOnDateBehavior: datePartOnly
+	fromColumn: ListOfOrders.'Ship Date'
+	toColumn: LocalDateTable_a2c5d7cf-af93-4a63-8738-41111ab04b3a.Date
+
+relationship AutoDetected_7fcdc52d-a58a-4f87-9d53-ad4c620e2c55
+	fromColumn: OrderBreakdown.'Order ID'
+	toColumn: ListOfOrders.'Order ID'
+

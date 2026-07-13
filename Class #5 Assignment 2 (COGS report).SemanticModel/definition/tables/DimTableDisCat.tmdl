@@ -1,0 +1,25 @@
+table DimTableDisCat
+	lineageTag: fff2357c-85a9-4d36-a8e3-99d203a0ed9f
+
+	column 'Discount Category'
+		dataType: string
+		lineageTag: e767f940-b31f-4623-924e-4c179e56d732
+		summarizeBy: none
+		sourceColumn: Discount Category
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimTableDisCat-bb40aeb7-1982-4ecf-afa5-b26f7f3e52c5 = m
+		mode: import
+		source =
+				let
+				    Source = TransactionTable,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Discount Category"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns")
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

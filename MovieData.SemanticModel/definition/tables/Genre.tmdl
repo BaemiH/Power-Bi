@@ -1,0 +1,48 @@
+table Genre
+	lineageTag: 37f8fb18-4ec8-4b10-ba88-b7841bf850f3
+
+	column 'Genre Name'
+		dataType: string
+		lineageTag: af8cfdad-d89c-4c8e-a811-bd554801579a
+		summarizeBy: none
+		sourceColumn: Genre Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column GenreID
+		dataType: int64
+		formatString: 0
+		lineageTag: c76d9f10-4f79-4a2b-96c6-b8dbdba3ed46
+		summarizeBy: none
+		sourceColumn: GenreID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Genre = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\Tommy Naughton\AppData\Local\Packages\Microsoft.MicrosoftPowerBIDesktop_8wekyb3d8bbwe\AC\INetCache\E2B7II0F\messyimdb[1]"),[Delimiter=";", Columns=12, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}, {"Column2", type text}, {"Column3", type text}, {"Column4", type text}, {"Column5", type text}, {"Column6", type text}, {"Column7", type text}, {"Column8", type text}, {"Column9", type text}, {"Column10", type text}, {"Column11", type text}, {"Column12", type text}}),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Changed Type", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"IMBD title ID", type text}, {"Original titlÊ", type text}, {"Release year", type text}, {"Genrë¨", type text}, {"Duration", type text}, {"Country", type text}, {"Content Rating", type text}, {"Director", type text}, {"", type text}, {"Income", type text}, {" Votes ", type text}, {"Score", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type1",{{"Original titlÊ", "Original Title"}, {"Genrë¨", "Genre"}, {"IMBD title ID", "MovieID"}}),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Renamed Columns",{"MovieID", "Genre"}),
+				    #"Removed Blank Rows" = Table.SelectRows(#"Removed Other Columns", each not List.IsEmpty(List.RemoveMatchingItems(Record.FieldValues(_), {"", null}))),
+				    #"Split Column by Delimiter" = Table.SplitColumn(#"Removed Blank Rows", "Genre", Splitter.SplitTextByDelimiter(",", QuoteStyle.Csv), {"Genre.1", "Genre.2", "Genre.3"}),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Split Column by Delimiter",{{"Genre.1", type text}, {"Genre.2", type text}, {"Genre.3", type text}}),
+				    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Changed Type2", {"MovieID"}, "Attribute", "Value"),
+				    #"Removed Columns" = Table.RemoveColumns(#"Unpivoted Other Columns",{"Attribute"}),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Removed Columns",{{"Value", "Genre Name"}}),
+				    #"Trimmed Text" = Table.TransformColumns(#"Renamed Columns1",{{"Genre Name", Text.Trim, type text}}),
+				    #"Removed Columns1" = Table.RemoveColumns(#"Trimmed Text",{"MovieID"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Columns1"),
+				    #"Added Index" = Table.AddIndexColumn(#"Removed Duplicates", "Index", 1, 1, Int64.Type),
+				    #"Renamed Columns2" = Table.RenameColumns(#"Added Index",{{"Index", "GenreID"}})
+				in
+				    #"Renamed Columns2"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

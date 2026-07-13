@@ -1,0 +1,66 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "0f91cc2738bc2a632038",
+  "position": {
+    "x": 0,
+    "y": 264.55927051671733,
+    "z": 3000,
+    "height": 455.19756838905778,
+    "width": 300.54711246200611,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "GDP"
+                        }
+                      },
+                      "Property": "Change %"
+                    }
+                  },
+                  "Function": 1
+                }
+              },
+              "queryRef": "Sum(GDP.Change %)",
+              "nativeQueryRef": "Average of Change %"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Aggregation": {
+                "Expression": {
+                  "Column": {
+                    "Expression": {
+                      "SourceRef": {
+                        "Entity": "GDP"
+                      }
+                    },
+                    "Property": "Change %"
+                  }
+                },
+                "Function": 1
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

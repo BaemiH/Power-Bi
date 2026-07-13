@@ -1,0 +1,33 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "c24dad5e0e1508350177",
+  "position": {
+    "x": 28.87372013651877,
+    "y": 278.90784982935156,
+    "z": 2000,
+    "height": 65.11945392491468,
+    "width": 922.11604095563143,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Change for Employee: Our HRBP data shows that Career advancement and Lack of recognition shows significant dissatisfaction, which is echoed through the given data. We recommend HR to look into was to resolve such issues within the company."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

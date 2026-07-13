@@ -1,0 +1,12 @@
+relationship AutoDetected_7ce9f22c-5f15-45b9-bed9-e35f22d07478
+	fromColumn: 'State GDP'.StateID
+	toColumn: State.StateID
+
+relationship 177b7f5d-3eb9-e019-9930-28a1fbd2ac47
+	fromColumn: 'State GDP'.CalendarID
+	toColumn: Calendar.CalendarID
+
+relationship 70dc96d5-b3d3-db53-9a7f-6c188ab1208d
+	fromColumn: 'State GDP'.GDPCategoryID
+	toColumn: 'GDP Category'.GDPCategoryID
+

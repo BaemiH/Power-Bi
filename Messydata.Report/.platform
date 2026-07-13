@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Messydata"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "2f91e138-8255-4b1a-81c0-e14ce0271824"
+  }
+}

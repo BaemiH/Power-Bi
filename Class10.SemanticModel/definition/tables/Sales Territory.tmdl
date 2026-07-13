@@ -1,0 +1,61 @@
+table 'Sales Territory'
+	lineageTag: e100aad7-ff3c-416e-ab50-f65daf4a360b
+
+	column SalesTerritoryKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5aa7d745-1657-4a6a-86f4-5a31fbda62ae
+		summarizeBy: none
+		sourceColumn: SalesTerritoryKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column TerritoryID
+		dataType: int64
+		formatString: 0
+		lineageTag: 94085c07-10f1-4621-9c00-66816efe39f5
+		summarizeBy: none
+		sourceColumn: TerritoryID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: ec65852a-483d-49ba-a0b6-2f409aca4401
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: 4b6d2ab6-f117-4081-9ada-425a9c1ffccb
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Group
+		dataType: string
+		lineageTag: d434d6dc-d7c9-4632-a337-c4f04e06a273
+		summarizeBy: none
+		sourceColumn: Group
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Sales Territory' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("bpbi.database.windows.net", "BPBI"),
+				    #"DW_Sales Territory" = Source{[Schema="DW",Item="Sales Territory"]}[Data]
+				in
+				    #"DW_Sales Territory"
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

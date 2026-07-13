@@ -1,0 +1,74 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 420,
+            "y": 0
+          },
+          "nodeIndex": "Calendar",
+          "nodeLineageTag": "abb42b59-c6c4-40ec-9641-2fef605384b3",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 131,
+            "y": 29
+          },
+          "nodeIndex": "GDP Category",
+          "nodeLineageTag": "2418e083-d2c7-4eea-8edf-a571dd30472a",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 724,
+            "y": 6
+          },
+          "nodeIndex": "State",
+          "nodeLineageTag": "e00f567f-4794-4552-8e5e-790a0b7d8e9b",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 420,
+            "y": 308
+          },
+          "nodeIndex": "State GDP",
+          "nodeLineageTag": "ffb0a699-96f7-4b6d-bb5c-634f841c1f1c",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

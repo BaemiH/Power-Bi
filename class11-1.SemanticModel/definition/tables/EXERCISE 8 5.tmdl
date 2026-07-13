@@ -1,0 +1,75 @@
+table 'EXERCISE 8 5'
+	lineageTag: dc453986-7684-4177-8abe-5f274f545600
+
+	column ReasonForLeaving
+		dataType: string
+		lineageTag: 8f225cf6-ffae-45f1-b09a-696259f638b3
+		summarizeBy: none
+		sourceColumn: ReasonForLeaving
+
+		annotation SummarizationSetBy = Automatic
+
+	column Impact
+		dataType: int64
+		formatString: 0
+		lineageTag: 509e1baf-a1f7-4377-8a39-935ac31db147
+		summarizeBy: none
+		sourceColumn: Impact
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = User
+
+	column HRBP
+		dataType: int64
+		formatString: 0
+		lineageTag: 21043750-37e2-43c6-989e-fe9bb54a6856
+		summarizeBy: sum
+		sourceColumn: HRBP
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column ExitSurvey
+		dataType: string
+		lineageTag: b5986df9-e886-4747-b928-2205cbcbfaf0
+		summarizeBy: none
+		sourceColumn: ExitSurvey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Size = 'EXERCISE 8 5'[HRBP]
+		dataType: int64
+		lineageTag: 3631e074-c560-4d55-a696-85cd987a74f6
+		summarizeBy: sum
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'EXERCISE 8 5' = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("T:\Users\mdelgado\Downloads\8.5 EXERCISE v2-1.xlsx"), null, true),
+				    #"EXERCISE 8.5_Sheet" = Source{[Item="EXERCISE 8.5",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(#"EXERCISE 8.5_Sheet", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"EXERCISE 8.5", type any}, {"Column2", type text}, {"Column3", type any}, {"Column4", type any}, {"Column5", type any}}),
+				    #"Removed Top Rows" = Table.Skip(#"Changed Type",3),
+				    #"Removed Columns" = Table.RemoveColumns(#"Removed Top Rows",{"EXERCISE 8.5"}),
+				    #"Removed Bottom Rows" = Table.RemoveLastN(#"Removed Columns",8),
+				    #"Removed Bottom Rows1" = Table.RemoveLastN(#"Removed Bottom Rows",4),
+				    #"Removed Blank Rows" = Table.SelectRows(#"Removed Bottom Rows1", each not List.IsEmpty(List.RemoveMatchingItems(Record.FieldValues(_), {"", null}))),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Blank Rows",{{"Column2", "ReasonForLeaving"}, {"Column3", "Impact"}, {"Column5", "ExitSurvey"}, {"Column4", "HRBP"}}),
+				    #"Removed Top Rows1" = Table.Skip(#"Renamed Columns",1),
+				    #"Removed Bottom Rows2" = Table.RemoveLastN(#"Removed Top Rows1",1)
+				in
+				    #"Removed Bottom Rows2"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

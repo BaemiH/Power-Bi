@@ -1,0 +1,326 @@
+table Sales
+	lineageTag: 96a3d6f9-b696-46ce-9724-2441fad5e064
+
+	measure 'Total Sales' = SUM ( Sales[SalesAmount] )
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 31a4e107-e4c9-43b6-a3a6-a91826d8695a
+
+	measure Profit = SUM ( 'Sales'[Margin] )
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: e8e5bcc4-384e-4a2a-8764-d3fb57d014f8
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Profit %' = DIVIDE ( [Profit] , [Total Sales] )
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 76dd7589-2a56-4f87-90a7-f778f49a3ada
+
+	measure 'Days Selling' = DISTINCTCOUNT ( 'Sales'[OrderDateKey] )
+		formatString: 0
+		lineageTag: a853e31f-d734-4079-96c4-97bfe45e7a16
+
+	measure 'Avg Sales per Transaction' = DIVIDE ( [Total Sales] , [Transactions] )
+		lineageTag: 0eca1611-8025-49f4-920e-cdfc5efc697d
+
+	measure 'Avg Sales per Day' = DIVIDE ( [Total Sales] , [Days Selling] )
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: fa9f80cf-1750-454e-a7af-0be9238b7c8d
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure Transactions = COUNTROWS ( Sales )
+		formatString: 0
+		lineageTag: ccbf42a6-94c5-4e31-b776-da0fd64fb774
+
+	measure 'Total Sales 2021' = ```
+			
+			CALCULATE(SUM('Sales'[SalesAmount]), 'Calendar'[CalendarYear] = 2021)
+			
+			```
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: da403ff0-6b05-4fa4-ad5c-2263885576d1
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column ProductKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 64593dd1-04e3-4079-ba5d-3595d373bac1
+		summarizeBy: none
+		sourceColumn: ProductKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderDateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 97c1775d-3534-4871-b793-ac3ead7cd698
+		summarizeBy: none
+		sourceColumn: OrderDateKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ShipDateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1a0aa592-7ffd-457c-88e4-a5902dcc159d
+		summarizeBy: none
+		sourceColumn: ShipDateKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8659127f-fb50-4874-a3db-52f213287f7b
+		summarizeBy: none
+		sourceColumn: CustomerKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesTerritoryKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 24fbe5e2-8899-4488-9aef-5040d42576bd
+		summarizeBy: none
+		sourceColumn: SalesTerritoryKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesOrderNumber
+		dataType: string
+		lineageTag: d1a2c70a-6feb-47ed-8e9e-c7dcdb18b88a
+		summarizeBy: none
+		sourceColumn: SalesOrderNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesOrderLineNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: 731f08ca-3d6b-4101-b071-56ec10b44569
+		summarizeBy: none
+		sourceColumn: SalesOrderLineNumber
+
+		annotation SummarizationSetBy = User
+
+	column OrderQuantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 15b5a350-dd1d-4a6d-8615-9a94a4e8d181
+		summarizeBy: sum
+		sourceColumn: OrderQuantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitPrice
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 666d39b0-60f0-44e9-b56a-06de44d7d89c
+		summarizeBy: sum
+		sourceColumn: UnitPrice
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column ExtendedAmount
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: f7d70003-92d6-49c4-839a-439dbb94d15a
+		summarizeBy: sum
+		sourceColumn: ExtendedAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column UnitPriceDiscountPct
+		dataType: double
+		lineageTag: 55fcf268-87eb-4308-965b-283d957b14f7
+		summarizeBy: sum
+		sourceColumn: UnitPriceDiscountPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DiscountAmount
+		dataType: double
+		lineageTag: 6af36f6f-aa9b-40a2-b618-05a2a0771617
+		summarizeBy: sum
+		sourceColumn: DiscountAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ProductStandardCost
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: c1d735e0-f6df-4029-b3fc-a8cdbf96dfa8
+		summarizeBy: sum
+		sourceColumn: ProductStandardCost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column TotalProductCost
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 35b863df-d3a6-4156-9919-45bf7a490485
+		summarizeBy: sum
+		sourceColumn: TotalProductCost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column SalesAmount
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: b0d06979-f6ab-4350-84e7-830e327ece61
+		summarizeBy: sum
+		sourceColumn: SalesAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column TaxAmt
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 7258cc59-f47f-4dc2-a08e-8ec842578aaa
+		summarizeBy: sum
+		sourceColumn: TaxAmt
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column Freight
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 2eeaeb97-9b5f-43c9-8c39-10fbb9285937
+		summarizeBy: sum
+		sourceColumn: Freight
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column OrderDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 43119198-8b7c-40a4-ae48-b9e15cb536b8
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		variation Variation
+			isDefault
+			relationship: 7ca88ee4-c8ca-49b0-b684-926eabe15d4e
+			defaultHierarchy: LocalDateTable_5f0d5fe2-a197-48ed-94e1-e60003e92dab.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column DueDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: c24d4c77-f8ea-4696-a02e-dca364bcbf2b
+		summarizeBy: none
+		sourceColumn: DueDate
+
+		variation Variation
+			isDefault
+			relationship: de906189-85b3-4d8e-8cd4-d6717f1c30ec
+			defaultHierarchy: LocalDateTable_edb61e81-accc-4d10-9c70-32eccf05ab5d.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column ShipDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: bfdcf934-048b-445c-975e-7aff2f857b93
+		summarizeBy: none
+		sourceColumn: ShipDate
+
+		variation Variation
+			isDefault
+			relationship: 6ad9952a-3531-49e6-8c95-113d17d6d4cf
+			defaultHierarchy: LocalDateTable_902b4559-07fa-43fe-95a4-536fac8953d2.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column TransType
+		dataType: int64
+		formatString: 0
+		lineageTag: 64684120-45e9-4a43-826f-05afc8f6ec80
+		summarizeBy: none
+		sourceColumn: TransType
+
+		annotation SummarizationSetBy = User
+
+	column RowNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: 8354c9eb-f647-4c39-8b48-e2aa6c9ab8ee
+		summarizeBy: none
+		sourceColumn: RowNumber
+
+		annotation SummarizationSetBy = User
+
+	column Margin = 'Sales'[SalesAmount] - 'Sales'[TotalProductCost]
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 5a519b31-bd7e-43f6-b147-eb4a9618bc8b
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column 'Margin %' = 'Sales'[Margin] / 'Sales'[SalesAmount]
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 4149724e-69b9-488c-8447-faa5963a0f7c
+		summarizeBy: average
+
+		annotation SummarizationSetBy = User
+
+	column 'Margin Pct' = ```
+			( 'Sales'[SalesAmount] - 'Sales'[TotalProductCost] ) 
+			/ IF ( 'Sales'[SalesAmount] = 0, 0, 'Sales'[SalesAmount] ) 
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: ae075778-a5e5-4a44-9613-4b4717630918
+		summarizeBy: average
+
+		annotation SummarizationSetBy = User
+
+	partition Sales = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("bpbi.database.windows.net", "BPBI"),
+				    DW_Sales = Source{[Schema="DW",Item="Sales"]}[Data]
+				in
+				    DW_Sales
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

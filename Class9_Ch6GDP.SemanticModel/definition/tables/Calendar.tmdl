@@ -1,0 +1,86 @@
+table Calendar
+	lineageTag: abb42b59-c6c4-40ec-9641-2fef605384b3
+	dataCategory: Time
+
+	column Date
+		isKey
+		formatString: Long Date
+		lineageTag: fc474105-9bcd-4497-ae84-5ffe2584caae
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Month = FORMAT('Calendar'[Date],"MMMM")
+		lineageTag: b349be21-6cb9-450e-9f17-8c112fe0d8bb
+		summarizeBy: none
+		sortByColumn: 'Month Number'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter = "Q"& FORMAT('Calendar'[Date],"q")
+		lineageTag: 81a1cab0-00ba-4b4f-9177-9764935f92c1
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year = FORMAT('Calendar'[Date],"yyyy")
+		dataType: int64
+		formatString: 0
+		lineageTag: ad811bec-42e8-4638-8ce6-9d1d7d9aab71
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Number' = FORMAT('Calendar'[Date],"M")
+		dataType: int64
+		formatString: 0
+		lineageTag: d5652e71-a779-465d-a2ad-377d5691aadd
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Quarter Number' = FORMAT('Calendar'[Date],"q")
+		dataType: int64
+		formatString: 0
+		lineageTag: d7b8f79c-0392-469e-84d2-66b61b23aa73
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Day Number' = WEEKDAY('Calendar'[Date])
+		formatString: 0
+		lineageTag: ad8a6504-84f9-44b9-9781-79ea328a59bf
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthYear = FORMAT('Calendar'[Date],"yyyy-mm")
+		lineageTag: 24a53142-f707-4ed5-ba9f-a06cc3254bf9
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Day = FORMAT('Calendar'[Date],"dddd")
+		lineageTag: e3cae39c-f111-461c-882a-b167bc26beae
+		summarizeBy: none
+		sortByColumn: 'Day Number'
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarID = CONVERT(FORMAT('Calendar'[Date],"YYYYMMdd"),INTEGER)
+		formatString: 0
+		lineageTag: 48f9a6b4-763d-4f80-bbc2-e1834d4478c5
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Calendar = calculated
+		mode: import
+		source = Calendar( Date(1997, 1, 1), Date(2023,12,31))
+
+	annotation PBI_Id = 45f94b60a27043c9993d5323d7207d4a
+

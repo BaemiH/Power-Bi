@@ -1,0 +1,110 @@
+table Metrics
+	lineageTag: f0598bd2-16b3-47fd-9595-84534e5e111d
+
+	measure 'Defect Count' = COUNTROWS(Metrics)
+		formatString: 0
+		lineageTag: f1c313bf-7e43-4359-ad95-d5f730f091ee
+
+	column Date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e3174612-a107-4f9e-bd36-c86adbb7617e
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sub Category ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 91eb0601-7dcd-435f-8d1f-23dada8e2a14
+		summarizeBy: none
+		sourceColumn: Sub Category ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Plant ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 43e2bc39-8cfe-48ef-b506-7ad843d8255b
+		summarizeBy: none
+		sourceColumn: Plant ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Vendor ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7ea296fb-a667-4e3d-b082-2ec5660c7aeb
+		summarizeBy: none
+		sourceColumn: Vendor ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Material ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 877cb8a2-4e57-47e0-aae7-1de27e540017
+		summarizeBy: count
+		sourceColumn: Material ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Defect Type ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: a927c5a6-2a4b-4614-ba0d-020c39aa2397
+		summarizeBy: none
+		sourceColumn: Defect Type ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Material Type ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 2b10f6f8-17e5-4b8d-8adc-b1109c113a26
+		summarizeBy: none
+		sourceColumn: Material Type ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Defect ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: fe9d73ba-aadd-4993-99d1-0ba8e1e9ec83
+		summarizeBy: none
+		sourceColumn: Defect ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Defect Qty'
+		dataType: int64
+		formatString: 0
+		lineageTag: 556719fb-401c-4bce-98ff-0022d0075d2a
+		summarizeBy: sum
+		sourceColumn: Defect Qty
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Downtime min'
+		dataType: int64
+		formatString: 0
+		lineageTag: 301da3b0-fac8-4114-818a-4bb11925f363
+		summarizeBy: sum
+		sourceColumn: Downtime min
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Metrics = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("T:\Users\tnaughton\Downloads\Data File J35 v2-1.xlsx"), null, true),
+				    Metrics_Sheet = Source{[Item="Metrics",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Metrics_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type datetime}, {"Sub Category ID", Int64.Type}, {"Plant ID", Int64.Type}, {"Vendor ID", Int64.Type}, {"Material ID", Int64.Type}, {"Defect Type ID", Int64.Type}, {"Material Type ID", Int64.Type}, {"Defect ID", Int64.Type}, {"Defect Qty", Int64.Type}, {"Downtime min", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,25 @@
+relationship 5925071c-5fd1-42d7-a48e-0fd727582962
+	fromColumn: TransactionTable.Segment
+	toColumn: DimTableSegment.Segment
+
+relationship d926ce3c-8908-43c5-8343-73a14da7d2d2
+	fromColumn: TransactionTable.Country
+	toColumn: DimTableCountry.Country
+
+relationship 0a015ac1-c871-4936-ad2a-4b19903813fc
+	fromColumn: TransactionTable.Product
+	toColumn: DimTableProduct.Product
+
+relationship 8be0c637-c883-4bbf-ae5c-ef5ccebd1854
+	fromColumn: TransactionTable.'Discount Category'
+	toColumn: DimTableDisCat.'Discount Category'
+
+relationship 1a266e46-a3b2-4745-be61-045ac4713189
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DimDateTable.Date
+	toColumn: LocalDateTable_c4e93afb-6fe2-4bd7-88d2-9e7fa73f9558.Date
+
+relationship 3428dcf7-8143-4adc-acd4-c938dfd6fb66
+	fromColumn: TransactionTable.Date
+	toColumn: DimDateTable.Date
+

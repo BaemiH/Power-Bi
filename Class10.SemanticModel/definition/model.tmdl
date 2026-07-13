@@ -1,0 +1,31 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["Calendar","Customers","Products","Sales","Sales Territory","Ship Date"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Calendar
+ref table DateTableTemplate_62888da6-0774-445c-a901-1042961fb686
+ref table Customers
+ref table LocalDateTable_b6a416a7-1da4-4845-9537-42715100f2f2
+ref table LocalDateTable_11e34a3e-0195-47e3-b2e2-aee11826b414
+ref table Products
+ref table LocalDateTable_1efb1525-9e75-417f-8596-ee7f96ad2c5e
+ref table LocalDateTable_72e9b240-3166-45bd-bbd3-1844bdc1fdf3
+ref table Sales
+ref table LocalDateTable_5f0d5fe2-a197-48ed-94e1-e60003e92dab
+ref table LocalDateTable_edb61e81-accc-4d10-9c70-32eccf05ab5d
+ref table LocalDateTable_902b4559-07fa-43fe-95a4-536fac8953d2
+ref table 'Sales Territory'
+ref table 'Ship Date'
+
+ref cultureInfo en-US
+

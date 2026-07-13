@@ -1,0 +1,69 @@
+table 'EXERCISE 5 2'
+	lineageTag: a3cb92d4-04f2-4bb2-8653-acd95c645719
+
+	column Quarter
+		dataType: string
+		lineageTag: e1f5ed8a-085e-44c8-bfa5-07d3ba7bde8e
+		summarizeBy: none
+		sourceColumn: Quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column Location
+		dataType: string
+		lineageTag: 09219f06-802a-474d-8ff7-9781092a4fc4
+		summarizeBy: none
+		sourceColumn: Location
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cars Sold'
+		dataType: int64
+		formatString: 0
+		lineageTag: 199fa4d5-3cfb-49a7-8b7a-6c7404b43926
+		summarizeBy: sum
+		sourceColumn: Cars Sold
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date = Var YearPart = LEFT([Quarter], 4) Var QuarterPart = MID([Quarter], 6,2) VAR MonthStart = SWITCH(QuarterPart, "Q1",1,"Q2",4,"Q3", 7, "Q4",10,1) RETURN DATE(YearPart, MonthStart,1)
+		formatString: Long Date
+		lineageTag: aff41834-9b38-4a26-8fc2-a52c5d77deb4
+		summarizeBy: none
+
+		variation Variation
+			isDefault
+			relationship: 39a8a7ff-85e2-4849-b35d-50b0b01a6d5c
+			defaultHierarchy: LocalDateTable_67d6f0d6-dc40-47f7-aa16-6dd6a28a2b28.'Date Hierarchy'
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition 'EXERCISE 5 2' = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("T:\Users\ralmarez\Downloads\5.2 EXERCISE.xlsx"), null, true),
+				    #"EXERCISE 5.2_Sheet" = Source{[Item="EXERCISE 5.2",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(#"EXERCISE 5.2_Sheet", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"EXERCISE 5.2", type any}, {"Column2", type text}, {"Column3", type any}, {"Column4", type any}, {"Column5", type any}, {"Column6", type any}, {"Column7", type any}, {"Column8", type any}, {"Column9", type any}, {"Column10", type any}, {"Column11", type text}, {"Column12", type any}, {"Column13", type any}, {"Column14", type any}, {"Column15", type any}, {"Column16", type any}, {"Column17", type any}, {"Column18", type any}, {"Column19", type any}, {"Column20", type any}, {"Column21", type any}, {"Column22", type any}, {"Column23", type any}, {"Column24", type any}, {"Column25", type any}, {"Column26", type any}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column10", "EXERCISE 5.2", "Column2", "Column3", "Column4", "Column5", "Column6", "Column7", "Column8", "Column9"}),
+				    #"Removed Top Rows" = Table.Skip(#"Removed Columns",2),
+				    #"Removed Top Rows1" = Table.Skip(#"Removed Top Rows",1),
+				    #"Removed Blank Rows" = Table.SelectRows(#"Removed Top Rows1", each not List.IsEmpty(List.RemoveMatchingItems(Record.FieldValues(_), {"", null}))),
+				    #"Promoted Headers1" = Table.PromoteHeaders(#"Removed Blank Rows", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers1",{{"Column1", type text}, {"BEACON", Int64.Type}, {"DRAPER", Int64.Type}, {"FILMORE", Int64.Type}, {"LAKESIDE", Int64.Type}, {"MARE VALLEY", Int64.Type}, {"NORTH", Int64.Type}, {"OAKLEY", Int64.Type}, {"ORLY", Int64.Type}, {"PIERCE", Int64.Type}, {"ROSEDALE", Int64.Type}, {"SEALY", Int64.Type}, {"SOUTHLAKE", Int64.Type}, {"WESTLAKE", Int64.Type}, {"WILDLAND", Int64.Type}, {"REGIONAL AVG", type number}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type1",{{"Column1", "Quarter"}}),
+				    #"Removed Columns1" = Table.RemoveColumns(#"Renamed Columns",{"REGIONAL AVG"}),
+				    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Removed Columns1", {"Quarter"}, "Attribute", "Value"),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Unpivoted Other Columns",{{"Attribute", "Location"}, {"Value", "Cars Sold"}})
+				in
+				    #"Renamed Columns1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,100 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 189
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 1065.63088471965,
+            "y": 451.23180195245192
+          },
+          "nodeIndex": "Calendar",
+          "nodeLineageTag": "28304b59-5446-4f5e-a948-ce1078400e3c",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 244.63088471965034,
+            "y": 650.46360390490372
+          },
+          "nodeIndex": "Customers",
+          "nodeLineageTag": "7f1a1a07-c9d5-44b0-a23f-f2613b013f51",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 248.76464982287075,
+            "y": 24
+          },
+          "nodeIndex": "Products",
+          "nodeLineageTag": "b9ed46fd-a44e-4bbf-94cc-d275c019f675",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 583.65368673700016,
+            "y": 191.70507901698187
+          },
+          "nodeIndex": "Sales",
+          "nodeLineageTag": "96a3d6f9-b696-46ce-9724-2441fad5e064",
+          "size": {
+            "height": 650,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 338.63005268311963
+          },
+          "nodeIndex": "Sales Territory",
+          "nodeLineageTag": "e100aad7-ff3c-416e-ab50-f65daf4a360b",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 927.63088471965023,
+            "y": 81.231801952451917
+          },
+          "nodeIndex": "Ship Date",
+          "nodeLineageTag": "91a7efe9-d969-44eb-a910-56ed09e26962",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 5
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

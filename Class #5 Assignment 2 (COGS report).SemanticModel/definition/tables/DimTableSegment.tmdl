@@ -1,0 +1,25 @@
+table DimTableSegment
+	lineageTag: b9d53134-da04-45ad-86d3-97c1a382cc56
+
+	column Segment
+		dataType: string
+		lineageTag: 89c1ae16-1957-4694-ae54-db173d8874cb
+		summarizeBy: none
+		sourceColumn: Segment
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimTableSegment-140c5ecf-e17f-4ddf-a3b4-339fbe063022 = m
+		mode: import
+		source =
+				let
+				    Source = TransactionTable,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Segment"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns")
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
